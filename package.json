@@ -1,0 +1,15 @@
+{
+  "name": "ensemble",
+  "version": "1.0.0",
+  "main": "out/index.js",
+  "repository": "https://github.com/matthewghuang/ensemble",
+  "author": "matthewghuang",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --outDir out",
+    "start": "node out/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.2"
+  }
+}
