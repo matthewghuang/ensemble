@@ -6,8 +6,8 @@
   "author": "matthewghuang",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --outDir out",
-    "start": "node out/index.js"
+    "build": "tsc src/index.ts",
+    "start": "node index.js"
   },
   "devDependencies": {
     "live-server": "^1.2.1",
