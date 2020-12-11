@@ -1,0 +1,11 @@
+{
+	"extends": "./tsconfig",
+	"compilerOptions": {
+		"target": "ES6",
+		"module": "commonjs",
+		"outDir": "."
+	},
+	"exclude": [
+		"src/web"
+	]
+}
