@@ -30,9 +30,14 @@ io.on("connection", (socket: Socket) => {
 
 			const cur_update = updates[room]
 
-			let should_update_clients = (update.src != undefined && cur_update.src != update.src) ||
-				(update.paused != undefined && cur_update.paused != update.paused) ||
-				((update.time != undefined && cur_update.time != undefined) && Math.abs(cur_update.time - update.time) > 2)
+			let should_update_clients: boolean = false
+
+			if (cur_update) {
+				should_update_clients = (update.src != undefined && cur_update.src != update.src) ||
+					(update.paused != undefined && cur_update.paused != update.paused) ||
+					((update.time != undefined && cur_update.time != undefined) && Math.abs(cur_update.time - update.time) > 1)
+			} else
+				should_update_clients = true
 
 			updates[room] = update
 

@@ -93,7 +93,10 @@ setInterval(() => {
 
 join_room_button.onclick = join_room
 
-set_src_button.onclick = () => update_server({ src: src_input.value })
+set_src_button.onclick = () => {
+	video_element.src = src_input.value
+	update_server({ src: video_element.src })
+}
 
 video_element.onplay = () => update_server({ paused: false })
 video_element.onpause = () => update_server({ paused: true })
