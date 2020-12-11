@@ -8,9 +8,11 @@
   "scripts": {
     "lint": "eslint src",
     "build-server": "tsc -p tsconfig.server.json",
-    "build-web": "tsc -p tsconfig.web.json && (browserify web/client.js | terser -cm -o web/bundle.min.js)",
-    "live-server": "live-server web",
-    "start": "node index.js"
+		"build-web": "tsc -p tsconfig.web.json && (browserify compiled/web/client.js | terser -cm -o web/bundle.js)",
+		"build-web-dev": "tsc -p tsconfig.web.json && browserify compiled/web/client.js -o web/bundle.js",
+		"build-prod": "tsc -p tsconfig.server.json & tsc -p tsconfig.web.json && (browserify compiled/web/client.js | terser -cm -o web/bundle.js)",
+    "live-server": "live-server web --cors",
+    "start": "node compiled/server/index.js"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.9.1",
@@ -18,11 +20,11 @@
     "browserify": "^17.0.0",
     "eslint": "^7.15.0",
     "live-server": "^1.2.1",
-    "socket.io-client": "^3.0.4",
     "terser": "^5.5.1",
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "socket.io": "^3.0.4"
+    "socket.io": "^3.0.4",
+    "socket.io-client": "^3.0.4"
   }
 }

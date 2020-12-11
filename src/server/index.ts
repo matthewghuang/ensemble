@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io"
-import Room from "../common/room"
+import Events from "../common/events"
+import Update from "../common/update"
 
 const io = new Server(3000, {
 	cors: {
@@ -7,17 +8,37 @@ const io = new Server(3000, {
 	}
 })
 
-let mock_room: Room = {
-	src: "http://techslides.com/demos/sample-videos/small.mp4",
-	time: 0,
-	paused: false
-}
+const members: Record<string, string[]> = {}
 
 io.on("connection", (socket: Socket) => {
-	socket.emit("room_data", JSON.stringify(mock_room))
+	socket.on(Events.JOIN_ROOM, (name: string, room_name: string) => {
+		socket.join(room_name)
 
-	socket.on("sync", (data: string) => {
-		mock_room = { ...mock_room, ...JSON.parse(data) }
-		io.emit("room_data", JSON.stringify(mock_room))
+		if (!members[room_name])
+			members[room_name] = []
+
+		members[room_name].push(name)
+
+		io.in(room_name).emit(Events.UPDATE_MEMBERS, members[room_name])
+	})
+
+	socket.on(Events.UPDATE_SERVER, (update: Update) => {
+		for (const room of socket.rooms) {
+			if (room == socket.id)
+				continue
+
+			socket.in(room).emit(Events.UPDATE_CLIENT, room)
+		}
+	})
+
+	socket.on(Events.DISCONNECTING, () => {
+		for (const room of socket.rooms) {
+			if (room == socket.id)
+				continue
+		
+			members[room].splice(members[room].findIndex(r => r == room), 1)
+		
+			socket.in(room).emit(Events.UPDATE_MEMBERS, members[room])
+		}
 	})
 })

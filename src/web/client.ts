@@ -1,38 +1,48 @@
 import { io } from "socket.io-client"
-import Room from "../common/room"
+import Events from "../common/events"
 
-const video_element: HTMLVideoElement =
-	document.getElementById("video") as HTMLVideoElement
+const video_element = document.getElementById("video") as HTMLVideoElement
+
+const name_input = document.getElementById("name_input") as HTMLInputElement
+
+const room_name_input =
+	document.getElementById("room_name_input") as HTMLInputElement
+const join_room_button =
+	document.getElementById("join_room_button") as HTMLButtonElement
+
+const src_input = document.getElementById("src_input") as HTMLInputElement
+const set_src_button =
+	document.getElementById("set_src_button") as HTMLButtonElement
+
+const members_ul = document.getElementById("members_ul") as HTMLUListElement
 
 const socket = io("http://localhost:3000")
 
-socket.on("room_data", (data: string) => {
-	const room = JSON.parse(data) as Room
+let members: string[] = []
 
-	const { src, time } = room
+const update_member_list = () => {
+	members_ul.innerHTML = ""
 
-	if (room.src != src)
-		video_element.setAttribute("src", room.src ?? "")
-
-	if (room.paused)
-		video_element.pause()
-	else
-		video_element.play()
-
-	if (room.time != time)
-		video_element.currentTime = room.time ?? 0
-})
-
-const send_sync = () => {
-	const new_room_data: Room = {
-		src: video_element.getAttribute("src") ?? "",
-		time: video_element.currentTime,
-		paused: video_element.paused
-	}
-
-	socket.emit("sync", JSON.stringify(new_room_data))
+	members.forEach(member => {
+		const message_li = document.createElement("li")
+		message_li.innerHTML = member
+		members_ul.append(message_li)
+	})
 }
 
-video_element.addEventListener("play", send_sync)
-video_element.addEventListener("pause", send_sync)
-video_element.addEventListener("seeked", send_sync)
+const join_room = () => {
+	const name = name_input.value
+	const room_name = room_name_input.value
+
+	socket.emit(Events.JOIN_ROOM, name, room_name)
+
+	members.push(name)
+	update_member_list()
+}
+
+socket.on(Events.UPDATE_MEMBERS, (updated_members: string[]) => {
+	members = updated_members
+	update_member_list()
+})
+
+join_room_button.onclick = join_room

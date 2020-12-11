@@ -2,9 +2,9 @@
 	"extends": "./tsconfig",
 	"compilerOptions": {
 		"target": "ES5",
-		"module": "system",
+		"module": "commonjs",
 		"moduleResolution": "node",
-		"outDir": "web"
+		"outDir": "compiled"
 	},
 	"exclude": [
 		"src/server"
