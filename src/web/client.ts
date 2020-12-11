@@ -78,13 +78,13 @@ socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 socket.on(Events.UPDATE_CLIENT, (update: Update) => {
 	const { src, time, paused } = update
 
-	if (src != undefined)
+	if (src != undefined && src != video_element.src)
 		video_element.src = src
 
-	if (time != undefined)
+	if (time != undefined && Math.abs(time - video_element.currentTime) > 1)
 		video_element.currentTime = time
 
-	if (paused != undefined)
+	if (paused != undefined && paused != video_element.paused)
 		paused ? video_element.pause() : video_element.play()
 })
 

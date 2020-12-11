@@ -33,21 +33,8 @@ io.on("connection", (socket: Socket) => {
 			if (room == socket.id)
 				continue
 
-			const cur_update = updates[room]
-
-			let should_update_clients: boolean = false
-
-			if (cur_update) {
-				should_update_clients = (update.src != undefined && cur_update.src != update.src) ||
-					(update.paused != undefined && cur_update.paused != update.paused) ||
-					((update.time != undefined && cur_update.time != undefined) && Math.abs(cur_update.time - update.time) > 1)
-			} else
-				should_update_clients = true
-
 			updates[room] = update
-
-			if (should_update_clients)
-				socket.in(room).emit(Events.UPDATE_CLIENT, update)
+			socket.in(room).emit(Events.UPDATE_CLIENT, update)
 		}
 	})
 
@@ -56,7 +43,8 @@ io.on("connection", (socket: Socket) => {
 			if (room == socket.id)
 				continue
 
-			members[room].splice(members[room].findIndex(v => v[0] == socket.id), 1)
+			members[room].splice(members[room]
+				.findIndex(([id]) => id == socket.id), 1)
 		
 			socket.in(room).emit(Events.UPDATE_MEMBERS, members[room])
 		}
