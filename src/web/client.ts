@@ -29,6 +29,7 @@ enum ClientFlags {
 
 let state: number = ClientFlags.NONE
 let members: string[] = []
+let your_name: string | undefined
 
 const update_member_list = () => {
 	members_ul.innerHTML = ""
@@ -46,12 +47,14 @@ const join_room = () => {
 
 	socket.emit(Events.JOIN_ROOM, name, room_name)
 
+	your_name = name
+
 	members.push(name)
 	update_member_list()
 
 	state = flag.set_flag(state, ClientFlags.IN_ROOM)
 
-	if (members[0] == name)
+	if (members[0] == your_name)
 		state = flag.set_flag(state, ClientFlags.HOST)
 }
 
@@ -73,7 +76,7 @@ const update_server = (src?: string, time?: number, paused?: boolean) => {
 socket.on(Events.UPDATE_MEMBERS, (updated_members: string[]) => {
 	members = updated_members	
 
-	if (members[0] == name)
+	if (members[0] == your_name)
 		state = flag.set_flag(state, ClientFlags.HOST)
 	else
 		state = flag.unset_flag(state, ClientFlags.HOST)

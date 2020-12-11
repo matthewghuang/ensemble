@@ -8,6 +8,7 @@ const io = new Server(3000, {
 	}
 })
 
+const updates: Record<string, Update> = {}
 const members: Record<string, string[]> = {}
 
 io.on("connection", (socket: Socket) => {
@@ -27,7 +28,15 @@ io.on("connection", (socket: Socket) => {
 			if (room == socket.id)
 				continue
 
-			socket.in(room).emit(Events.UPDATE_CLIENT, room)
+			const cur_update = updates[room]
+
+			let should_update_clients = (update.src != undefined && cur_update.src != update.src) ||
+				(update.paused != undefined && cur_update.paused != update.paused) ||
+				((update.time != undefined && cur_update.time != undefined) && Math.abs(cur_update.time - update.time) > 2)
+				should_update_clients
+
+			updates[room] = update
+			socket.in(room).emit(Events.UPDATE_CLIENT, update)
 		}
 	})
 
