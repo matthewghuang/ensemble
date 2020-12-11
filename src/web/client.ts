@@ -58,18 +58,7 @@ const join_room = () => {
 		state = flag.set_flag(state, ClientFlags.HOST)
 }
 
-const update_server = (src?: string, time?: number, paused?: boolean) => {
-	const update: Update = {}
-
-	if (src)
-		update.src = src
-
-	if (time)
-		update.time = time
-
-	if (paused)
-		update.paused = paused
-
+const update_server = (update: Update) => {
 	socket.emit(Events.UPDATE_SERVER, update)
 }
 
@@ -99,7 +88,12 @@ socket.on(Events.UPDATE_CLIENT, (update: Update) => {
 
 setInterval(() => {
 	if (flag.has_flag(state, ClientFlags.HOST))
-		update_server(video_element.src, video_element.currentTime, video_element.paused)
+		update_server({ time: video_element.currentTime })
 }, 1000)
 
 join_room_button.onclick = join_room
+
+set_src_button.onclick = () => update_server({ src: src_input.value })
+
+video_element.onplay = () => update_server({ paused: false })
+video_element.onpause = () => update_server({ paused: true })
