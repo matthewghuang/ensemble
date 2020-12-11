@@ -7,7 +7,7 @@
 	},
 	"exclude": [
 		"src/web",
-		"src/test",
+		"src/server",
 		"src/types"
 	]
 }
