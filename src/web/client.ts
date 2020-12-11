@@ -31,7 +31,7 @@ let state: number = ClientFlags.NONE
 let members: Array<[string, string]> = []
 let your_name: string | undefined
 
-const update_member_list = () => {
+const update_member_list = (members: Array<[string, string]>) => {
 	members_ul.innerHTML = ""
 
 	members.forEach(member => {
@@ -62,12 +62,17 @@ const is_host = (your_name: string, members: Array<[string,string]>): boolean =>
 }
 
 socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
-	if (is_host(your_name ?? "", updated_members))
+	const am_i_host = is_host(your_name ?? "", updated_members)
+
+	if (am_i_host) {
 		state = flag.set_flag(state, ClientFlags.HOST)
-	else
+	} else
 		state = flag.unset_flag(state, ClientFlags.HOST)
 
-	update_member_list()
+	src_input.style.display = am_i_host ? "block" : "none"
+	set_src_button.style.display = am_i_host ? "block" : "none"
+
+	update_member_list(updated_members)
 })
 
 socket.on(Events.UPDATE_CLIENT, (update: Update) => {
@@ -84,8 +89,13 @@ socket.on(Events.UPDATE_CLIENT, (update: Update) => {
 })
 
 setInterval(() => {
-	if (flag.has_flag(state, ClientFlags.HOST))
-		update_server({ time: video_element.currentTime })
+	if (flag.has_flag(state, ClientFlags.HOST)) {
+		update_server({
+			src: video_element.src,
+			time: video_element.currentTime,
+			paused: video_element.paused
+		})
+	}
 }, 1000)
 
 join_room_button.onclick = join_room
@@ -95,5 +105,6 @@ set_src_button.onclick = () => {
 	update_server({ src: video_element.src })
 }
 
+video_element.onseeked = () => update_server({ time: video_element.currentTime })
 video_element.onplay = () => update_server({ paused: false })
 video_element.onpause = () => update_server({ paused: true })

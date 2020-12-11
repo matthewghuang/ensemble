@@ -22,8 +22,10 @@ io.on("connection", (socket: Socket) => {
 
 		io.in(room_name).emit(Events.UPDATE_MEMBERS, members[room_name])
 
-		if (updates[room_name])
+		if (updates[room_name]) {
 			socket.emit(Events.UPDATE_CLIENT, updates[room_name])
+			console.log(`updating ${name}`, updates[room_name])
+		}
 	})
 
 	socket.on(Events.UPDATE_SERVER, (update: Update) => {
