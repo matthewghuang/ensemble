@@ -57,12 +57,12 @@ const update_server = (update: Update) => {
 	socket.emit(Events.UPDATE_SERVER, update)
 }
 
+const is_host = (your_name: string, members: Array<[string,string]>): boolean => {
+	return members[0][1] == your_name
+}
+
 socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
-	members = updated_members	
-
-	const [, name] = members[0]
-
-	if (name == your_name)
+	if (is_host(your_name ?? "", updated_members))
 		state = flag.set_flag(state, ClientFlags.HOST)
 	else
 		state = flag.unset_flag(state, ClientFlags.HOST)
