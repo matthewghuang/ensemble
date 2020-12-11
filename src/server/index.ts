@@ -9,7 +9,7 @@ const io = new Server(3000, {
 })
 
 const updates: Record<string, Update> = {}
-const members: Record<string, string[]> = {}
+const members: Record<string, Array<[string, string]>> = {}
 
 io.on("connection", (socket: Socket) => {
 	socket.on(Events.JOIN_ROOM, (name: string, room_name: string) => {
@@ -18,9 +18,12 @@ io.on("connection", (socket: Socket) => {
 		if (!members[room_name])
 			members[room_name] = []
 
-		members[room_name].push(name)
+		members[room_name].push([socket.id, name])
 
 		io.in(room_name).emit(Events.UPDATE_MEMBERS, members[room_name])
+
+		if (updates[room_name])
+			socket.emit(Events.UPDATE_CLIENT, updates[room_name])
 	})
 
 	socket.on(Events.UPDATE_SERVER, (update: Update) => {
@@ -50,8 +53,8 @@ io.on("connection", (socket: Socket) => {
 		for (const room of socket.rooms) {
 			if (room == socket.id)
 				continue
-		
-			members[room].splice(members[room].findIndex(r => r == room), 1)
+
+			members[room].splice(members[room].findIndex(v => v[0] == socket.id), 1)
 		
 			socket.in(room).emit(Events.UPDATE_MEMBERS, members[room])
 		}

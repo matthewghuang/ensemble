@@ -28,15 +28,16 @@ enum ClientFlags {
 }
 
 let state: number = ClientFlags.NONE
-let members: string[] = []
+let members: Array<[string, string]> = []
 let your_name: string | undefined
 
 const update_member_list = () => {
 	members_ul.innerHTML = ""
 
 	members.forEach(member => {
+		const [, name] = member
 		const message_li = document.createElement("li")
-		message_li.innerHTML = member
+		message_li.innerHTML = name
 		members_ul.append(message_li)
 	})
 }
@@ -49,23 +50,19 @@ const join_room = () => {
 
 	your_name = name
 
-	members.push(name)
-	update_member_list()
-
 	state = flag.set_flag(state, ClientFlags.IN_ROOM)
-
-	if (members[0] == your_name)
-		state = flag.set_flag(state, ClientFlags.HOST)
 }
 
 const update_server = (update: Update) => {
 	socket.emit(Events.UPDATE_SERVER, update)
 }
 
-socket.on(Events.UPDATE_MEMBERS, (updated_members: string[]) => {
+socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 	members = updated_members	
 
-	if (members[0] == your_name)
+	const [, name] = members[0]
+
+	if (name == your_name)
 		state = flag.set_flag(state, ClientFlags.HOST)
 	else
 		state = flag.unset_flag(state, ClientFlags.HOST)
