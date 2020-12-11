@@ -32,9 +32,11 @@ io.on("connection", (socket: Socket) => {
 		for (const room of socket.rooms) {
 			if (room == socket.id)
 				continue
-
-			updates[room] = update
-			socket.in(room).emit(Events.UPDATE_CLIENT, update)
+		
+			if (members[room][0][0] == socket.id) {
+				updates[room] = update
+				socket.in(room).emit(Events.UPDATE_CLIENT, update)
+			}
 		}
 	})
 

@@ -54,7 +54,8 @@ const join_room = () => {
 }
 
 const update_server = (update: Update) => {
-	socket.emit(Events.UPDATE_SERVER, update)
+	if (is_host(your_name ?? "", members))
+		socket.emit(Events.UPDATE_SERVER, update)
 }
 
 const is_host = (your_name: string, members: Array<[string,string]>): boolean => {
