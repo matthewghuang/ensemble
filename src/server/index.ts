@@ -33,10 +33,11 @@ io.on("connection", (socket: Socket) => {
 			let should_update_clients = (update.src != undefined && cur_update.src != update.src) ||
 				(update.paused != undefined && cur_update.paused != update.paused) ||
 				((update.time != undefined && cur_update.time != undefined) && Math.abs(cur_update.time - update.time) > 2)
-				should_update_clients
 
 			updates[room] = update
-			socket.in(room).emit(Events.UPDATE_CLIENT, update)
+
+			if (should_update_clients)
+				socket.in(room).emit(Events.UPDATE_CLIENT, update)
 		}
 	})
 
