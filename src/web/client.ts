@@ -1,5 +1,8 @@
 import { io } from "socket.io-client"
+import Update from "../common/update"
 import Events from "../common/events"
+import * as flag from "../common/flag"
+import { Client } from "socket.io/dist/client"
 
 const video_element = document.getElementById("video") as HTMLVideoElement
 
@@ -18,6 +21,13 @@ const members_ul = document.getElementById("members_ul") as HTMLUListElement
 
 const socket = io("http://localhost:3000")
 
+enum ClientFlags {
+	NONE = 0,
+	IN_ROOM = 1 << 0,
+	HOST = 1 << 1
+}
+
+let state: number = ClientFlags.NONE
 let members: string[] = []
 
 const update_member_list = () => {
@@ -38,11 +48,55 @@ const join_room = () => {
 
 	members.push(name)
 	update_member_list()
+
+	state = flag.set_flag(state, ClientFlags.IN_ROOM)
+
+	if (members[0] == name)
+		state = flag.set_flag(state, ClientFlags.HOST)
+}
+
+const update_server = (src?: string, time?: number, paused?: boolean) => {
+	const update: Update = {}
+
+	if (src)
+		update.src = src
+
+	if (time)
+		update.time = time
+
+	if (paused)
+		update.paused = paused
+
+	socket.emit(Events.UPDATE_SERVER, update)
 }
 
 socket.on(Events.UPDATE_MEMBERS, (updated_members: string[]) => {
-	members = updated_members
+	members = updated_members	
+
+	if (members[0] == name)
+		state = flag.set_flag(state, ClientFlags.HOST)
+	else
+		state = flag.unset_flag(state, ClientFlags.HOST)
+
 	update_member_list()
 })
+
+socket.on(Events.UPDATE_CLIENT, (update: Update) => {
+	const { src, time, paused } = update
+
+	if (src != undefined)
+		video_element.src = src
+
+	if (time != undefined)
+		video_element.currentTime = time
+
+	if (paused != undefined)
+		paused ? video_element.pause() : video_element.play()
+})
+
+setInterval(() => {
+	if (flag.has_flag(state, ClientFlags.HOST))
+		update_server(video_element.src, video_element.currentTime, video_element.paused)
+}, 1000)
 
 join_room_button.onclick = join_room
