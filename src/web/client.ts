@@ -31,6 +31,10 @@ let state: number = ClientFlags.NONE
 let members: Array<[string, string]> = []
 let your_name: string | undefined
 
+const is_host = (your_name: string, members: Array<[string,string]>): boolean => {
+	return members[0][1] == your_name
+}
+
 const update_member_list = (members: Array<[string, string]>) => {
 	members_ul.innerHTML = ""
 
@@ -58,10 +62,6 @@ const update_server = (update: Update) => {
 		socket.emit(Events.UPDATE_SERVER, update)
 }
 
-const is_host = (your_name: string, members: Array<[string,string]>): boolean => {
-	return members[0][1] == your_name
-}
-
 socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 	const am_i_host = is_host(your_name ?? "", updated_members)
 
@@ -72,6 +72,8 @@ socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 
 	src_input.style.display = am_i_host ? "block" : "none"
 	set_src_button.style.display = am_i_host ? "block" : "none"
+
+	members = updated_members
 
 	update_member_list(updated_members)
 })
