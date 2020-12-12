@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"target": "ES6",
 		"module": "commonjs",
-		"outDir": "."
+		"outDir": "compiled"
 	},
 	"exclude": [
 		"src/web",
