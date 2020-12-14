@@ -117,5 +117,5 @@ dist
 
 # ignore built files
 *.js
-./compiled/
-./web/
+/compiled/
+/web/
