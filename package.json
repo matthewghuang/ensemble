@@ -23,6 +23,8 @@
     "eslint": "^7.15.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-terser": "^2.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
     "human-readable-ids": "^1.0.4",
     "jasmine": "^3.6.3",
