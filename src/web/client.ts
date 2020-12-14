@@ -2,7 +2,6 @@ import { io } from "socket.io-client"
 import Update from "../common/update"
 import Events from "../common/events"
 import * as flag from "../common/flag"
-import { Client } from "socket.io/dist/client"
 
 const video_element = document.getElementById("video") as HTMLVideoElement
 
