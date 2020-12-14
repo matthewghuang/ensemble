@@ -3,7 +3,10 @@
 	"compilerOptions": {
 		"target": "ES6",
 		"module": "commonjs",
-		"outDir": "compiled"
+		"outDir": "compiled",
+		"types": [
+			"./src/types/human-readable-ids"
+		]
 	},
 	"exclude": [
 		"src/web",

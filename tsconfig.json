@@ -4,10 +4,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"downlevelIteration": true,
-		"types": [
-			"./src/types/human-readable-ids"
-		]
+		"downlevelIteration": true
 	},
 	"include": [
 		"src"
