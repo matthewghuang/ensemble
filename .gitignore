@@ -116,6 +116,5 @@ dist
 .pnp.*
 
 # ignore built files
-*.js
 /compiled/
 /web/
