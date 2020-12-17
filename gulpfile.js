@@ -3,10 +3,7 @@ const ts = require("gulp-typescript")
 const htmlmin = require("gulp-htmlmin")
 const terser = require("gulp-terser")
 const pug = require("gulp-pug")
-const browserify = require("browserify")
-const source = require("vinyl-source-stream")
-const streamify = require("gulp-streamify")
-const rename = require("gulp-rename")
+const exec = require("child_process").exec
 
 const compiler_options = {
 	target: "ES6",
@@ -30,36 +27,22 @@ const compile_server = () => {
 
 }
 
-const compile_web = () => {
-	gulp.src([
-			"src/web/watch.ts",
-			"src/common/*.ts"
-		], { base: "src" })
-		.pipe(ts({
-			...compiler_options,
-			target: "ES5",
-			outDir: ".temp"
-		}))
-		.pipe(gulp.dest(".temp"))
-
-	const b = browserify(".temp/web/watch.js").bundle()
-
-	return b.pipe(source("bundle.js"))
-		.pipe(streamify(terser()))
-		.pipe(gulp.dest("web"))
+const run_snowpack = (cb) => {
+	return exec("yarn snowpack build")
 }
 
-const build_html = () => {
-	return gulp.src("src/web/*.pug")
+const minify_js = () => {
+	return gulp.src([ "build/**/*.js" ])
+		.pipe(terser())
+		.pipe(gulp.dest("build"))
+}
+
+const process_html = () => {
+	return gulp.src("build/*.pug")
 		.pipe(pug())
 		.pipe(htmlmin({ collapseWhitespace: true }))
-		.pipe(gulp.dest("web"))
+		.pipe(gulp.dest("build"))
 }
 
-gulp.task("web", gulp.series(compile_web, build_html))
-gulp.task("web-dev", () => {
-	gulp.watch("src/web/*.pug", build_html)
-	gulp.watch("src/web/*.ts", compile_web)
-})
-
+gulp.task("snowpack", gulp.series(run_snowpack, minify_js, process_html))
 gulp.task("server", gulp.series(compile_server))
