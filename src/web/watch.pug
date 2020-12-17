@@ -1,13 +1,20 @@
 doctype html
 html(lang="en")
 	include include/head.pug
+	link(rel="stylesheet", href="https://cdn.plyr.io/3.6.3/plyr.css")
 	body
 		.container
-			form
-				fieldset
-					video#video(controls=true)
+			h1 ensemble
 
+			video#video.video-js(controls playsinline)
+
+			.row
+				.column
+					h2 members
 					ul#members_ul
+				.column
+					h2 change media
+					input(type="text" placeholder="media")
+					button change media
 
-		script(src="https://unpkg.com/systemjs/dist/s.min.js")
-		script(src="bundle.js")
+		script(src="watch.js" type="module")

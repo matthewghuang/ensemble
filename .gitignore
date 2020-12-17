@@ -117,4 +117,5 @@ dist
 
 # ignore built files
 /web/
-/.temp
+/build/
+/out/
