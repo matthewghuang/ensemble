@@ -24,14 +24,13 @@ const compile_server = () => {
 
 const compile_web = () => {
 	return gulp.src([
-			"src/web/client.ts",
+			"src/web/*.ts",
 			"src/common/*.ts"
 		], { base: "src" })
 		.pipe(ts({
 			...compiler_options,
 			module: "system",
-			moduleResolution: "node",
-			outFile: "bundle.js"
+			moduleResolution: "node"
 		}))
 		.pipe(terser())
 		.pipe(gulp.dest("web"))

@@ -2,18 +2,19 @@ doctype html
 html(lang="en")
 	include include/head.pug
 	body
-		form
-			fieldset
-				label(for="name") Name
-				input#name_input(type="text" name="name")
-				label(for="room name") Room Name
-				input#room_name_input(type="text" name="room name")
-				label(for="src") Src
-				input#src_input(type="text" name="src")
-				button#set_src_button Set Src
+		.container
+			form
+				fieldset
+					label(for="name") Name
+					input#name_input(type="text" name="name")
+					label(for="room name") Room Name
+					input#room_name_input(type="text" name="room name")
+					label(for="src") Src
+					input#src_input(type="text" name="src")
+					button#set_src_button Set Src
 
-				video#video(controls=true)
+					video#video(controls=true)
 
-				ul#members_ul
-				script(src="https://unpkg/systemjs/dist/s.min.js")
-				script(src="bundle.js")
+					ul#members_ul
+					script(src="https://unpkg.com/systemjs/dist/s.min.js")
+					script(src="web/watch.js")
