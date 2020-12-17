@@ -116,5 +116,5 @@ dist
 .pnp.*
 
 # ignore built files
-/compiled/
 /web/
+/.temp

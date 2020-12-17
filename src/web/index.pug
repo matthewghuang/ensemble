@@ -6,11 +6,11 @@ html(lang="en")
 			h1
 				| ensemble 
 				small watch videos, together
-			form(action="/watch.html", method="get")
+			form(action="watch.html")
 				fieldset
 					label(for="name") Your Name 
-					input(type="text" name="name" placeholder="name")
+					input#name(type="text" name="name" placeholder="name")
 
 					label(for="room id") Room ID 
-					input(type="text" name="room_id" placeholder="dabois42")
-					input(type="submit" value="join or create a room")
+					input#room_id(type="text" name="room_id" placeholder="dabois42")
+					input#submit(type="submit" value="join or create a room")

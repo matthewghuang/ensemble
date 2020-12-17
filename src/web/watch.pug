@@ -5,16 +5,9 @@ html(lang="en")
 		.container
 			form
 				fieldset
-					label(for="name") Name
-					input#name_input(type="text" name="name")
-					label(for="room name") Room Name
-					input#room_name_input(type="text" name="room name")
-					label(for="src") Src
-					input#src_input(type="text" name="src")
-					button#set_src_button Set Src
-
 					video#video(controls=true)
 
 					ul#members_ul
-					script(src="https://unpkg.com/systemjs/dist/s.min.js")
-					script(src="web/watch.js")
+
+		script(src="https://unpkg.com/systemjs/dist/s.min.js")
+		script(src="bundle.js")

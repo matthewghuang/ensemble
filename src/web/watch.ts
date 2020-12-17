@@ -4,18 +4,6 @@ import Events from "../common/events"
 import * as flag from "../common/flag"
 
 const video_element = document.getElementById("video") as HTMLVideoElement
-
-const name_input = document.getElementById("name_input") as HTMLInputElement
-
-const room_name_input =
-	document.getElementById("room_name_input") as HTMLInputElement
-const join_room_button =
-	document.getElementById("join_room_button") as HTMLButtonElement
-
-const src_input = document.getElementById("src_input") as HTMLInputElement
-const set_src_button =
-	document.getElementById("set_src_button") as HTMLButtonElement
-
 const members_ul = document.getElementById("members_ul") as HTMLUListElement
 
 const socket = io("http://localhost:3000")
@@ -46,10 +34,12 @@ const update_member_list = (members: Array<[string, string]>) => {
 }
 
 const join_room = () => {
-	const name = name_input.value
-	const room_name = room_name_input.value
+	const search_params = new URLSearchParams(window.location.search)
 
-	socket.emit(Events.JOIN_ROOM, name, room_name)
+	let name = search_params.get("name") ?? ""
+	let room_id = search_params.get("room_id")
+
+	socket.emit(Events.JOIN_ROOM, name, room_id)
 
 	your_name = name
 
@@ -68,9 +58,6 @@ socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 		state = flag.set_flag(state, ClientFlags.HOST)
 	} else
 		state = flag.unset_flag(state, ClientFlags.HOST)
-
-	src_input.style.display = am_i_host ? "block" : "none"
-	set_src_button.style.display = am_i_host ? "block" : "none"
 
 	members = updated_members
 
@@ -100,12 +87,9 @@ setInterval(() => {
 	}
 }, 1000)
 
-join_room_button.onclick = join_room
-
-set_src_button.onclick = () => {
-	video_element.src = src_input.value
-	update_server({ src: video_element.src })
-}
+setTimeout(() => {
+	join_room()
+}, 1000)
 
 video_element.onseeked = () => update_server({ time: video_element.currentTime })
 video_element.onplay = () => update_server({ paused: false })
