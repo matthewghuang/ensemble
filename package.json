@@ -10,24 +10,24 @@
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "eslint": "^7.15.0",
-		"human-readable-ids": "^1.0.4",
+    "human-readable-ids": "^1.0.4",
     "jasmine": "^3.6.3",
     "live-server": "^1.2.1"
   },
   "dependencies": {
     "gulp": "^4.0.2",
     "gulp-cli": "^1.3.0",
-    "gulp-htmlmin": "^4.0.1",
+    "gulp-htmlmin": "^5.0.1",
     "gulp-pug": "^3.0.1",
     "gulp-rename": "^1.0.0",
     "gulp-terser": "^1.0.0",
     "gulp-typescript": "^5.0.0-alpha.1",
-    "typescript": "^4.1.2",
+    "plyr": "^3.6.3",
     "purecss": "^2.0.3",
-    "terser": "^5.5.1",
     "snowpack": "^2.18.4",
-		"plyr": "^3.6.3",
     "socket.io": "^3.0.4",
-    "socket.io-client": "^3.0.4"
+    "socket.io-client": "^3.0.4",
+    "terser": "^5.5.1",
+    "typescript": "^4.1.2"
   }
 }
