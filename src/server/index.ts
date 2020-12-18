@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io"
 import Events from "../common/events"
 import Update from "../common/update"
 
-const port: number = Number(process.env.port) || 3000
+const port: number = Number(process.env.PORT) || 3000
 
 const io = new Server(port, {
 	cors: {
