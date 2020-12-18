@@ -12,7 +12,7 @@ const src_input = document.getElementById("src") as HTMLInputElement
 const change_media_button = document.getElementById("change_media") as HTMLButtonElement
 const members_ul = document.getElementById("members") as HTMLUListElement
 
-const socket = io("http://localhost:3000")
+const socket = io()
 
 enum ClientFlags {
 	NONE = 0,
