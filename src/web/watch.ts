@@ -4,6 +4,7 @@ import Events from "../common/events"
 import * as flag from "../common/flag"
 import Plyr from "plyr"
 import "purecss/build/pure-min.css"
+import "purecss/build/grids-responsive-min.css"
 import "plyr/dist/plyr.css"
 import "./style.css"
 
