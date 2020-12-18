@@ -4,7 +4,10 @@
   "main": "out/index.js",
   "repository": "https://github.com/matthewghuang/ensemble",
   "author": "matthewghuang",
-  "license": "MIT",
+	"license": "MIT",
+	"scripts": {
+		"start-server": "gulp server && node out/server/index.js"
+	},
   "devDependencies": {
     "@types/jasmine": "^3.6.2",
     "@typescript-eslint/eslint-plugin": "^4.9.1",

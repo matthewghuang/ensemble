@@ -26,7 +26,6 @@ io.on("connection", (socket: Socket) => {
 
 		if (updates[room_name]) {
 			socket.emit(Events.UPDATE_CLIENT, updates[room_name])
-			console.log(`updating ${name}`, updates[room_name])
 		}
 	})
 
@@ -36,7 +35,6 @@ io.on("connection", (socket: Socket) => {
 				continue
 
 			if (members[room][0][0] == socket.id) {
-				console.log(room, update)
 				updates[room] = update
 				socket.in(room).emit(Events.UPDATE_CLIENT, update)
 			}
@@ -55,3 +53,5 @@ io.on("connection", (socket: Socket) => {
 		}
 	})
 })
+
+console.log(`socket.io server listening on port ${3000}`)
