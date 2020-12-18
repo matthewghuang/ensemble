@@ -1,7 +1,6 @@
 import { io } from "socket.io-client"
 import Update from "../common/update"
 import Events from "../common/events"
-import SourceType from "../common/source-type"
 import * as flag from "../common/flag"
 import Plyr from "plyr"
 import "purecss/build/pure-min.css"
@@ -28,19 +27,6 @@ let player: Plyr = new Plyr("#video")
 
 const is_host = (your_name: string, members: Array<[string, string]>): boolean => {
 	return members[0][1] == your_name
-}
-
-const get_source_type = (src: string): SourceType => {
-	const has = (str: string, find: string): boolean => {
-		return str.indexOf(find) != -1
-	}
-
-	if (has(src, "youtu"))
-		return SourceType.YOUTUBE
-	else if (has(src, "vimeo"))
-		return SourceType.VIMEO
-	else
-		return SourceType.HTML5
 }
 
 const update_member_list = (members: Array<[string, string]>) => {
@@ -75,27 +61,15 @@ const update_server = (update: Update) => {
 		socket.emit(Events.UPDATE_SERVER, update)
 }
 
-const set_src = (src, src_type, player) => {
-	if (src_type == SourceType.HTML5) {
-		player.source = {
-			type: "video",
-			sources: [
-				{
-					src: src,
-					type: "video/mp4"
-				}
-			]
-		}
-	} else if (src_type == SourceType.YOUTUBE || src_type == SourceType.VIMEO) {
-		player.source = {
-			type: "video",
-			sources: [
-				{
-					src: src,
-					provider: src_type
-				}
-			]
-		}
+const set_src = (src, player) => {
+	player.source = {
+		type: "video",
+		sources: [
+			{
+				src: src,
+				type: "video/mp4"
+			}
+		]
 	}
 }
 
@@ -118,10 +92,10 @@ socket.on(Events.UPDATE_MEMBERS, (updated_members: Array<[string, string]>) => {
 })
 
 socket.on(Events.UPDATE_CLIENT, (update: Update) => {
-	const { src, src_type, time, paused } = update
+	const { src, time, paused } = update
 
 	if (src != undefined && src != (player.source as any))
-		set_src(src, src_type, player)
+		set_src(src, player)
 
 	if (time != undefined && Math.abs(time - player.currentTime) > 1)
 		player.currentTime = time
@@ -134,7 +108,6 @@ setInterval(() => {
 	if (flag.has_flag(state, ClientFlags.HOST)) {
 		update_server({
 			src: player.source as any,
-			src_type: get_source_type(player.source as any),
 			time: player.currentTime,
 			paused: player.paused
 		})
@@ -146,8 +119,8 @@ setTimeout(() => {
 }, 1000)
 
 change_media_button.onclick = () => {
-	set_src((document.getElementById("src") as HTMLInputElement).value, get_source_type(src_input.value), player)
-	update_server({ src: player.source as any, src_type: get_source_type(src_input.value) })
+	set_src(src_input.value, player)
+	update_server({ src: player.source as any })
 	return false
 }
 

@@ -1,12 +1,15 @@
 doctype html
 html(lang="en")
 	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
 		title ensemble
 	body
 		.container
-			h1 ensemble
+			h1
+				a#home_link(href="/") ensemble
 
-			video#video.video-js(controls playsinline)
+			video#video(controls playsinline)
 
 			.pure-g
 				.pure-u-1-2
@@ -16,7 +19,7 @@ html(lang="en")
 					form#media-form.pure-form.pure-form-stacked
 						fieldset
 							h2 change media
-							label(for="src") Source (MP4, YouTube, Vimeo)
+							label(for="src") Source
 							input#src(type="text" name="src")
 							button#change_media Change Media 
 

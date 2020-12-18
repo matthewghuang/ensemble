@@ -26,8 +26,6 @@ const updates: Record<string, Update> = {}
 const members: Record<string, Array<[string, string]>> = {}
 
 io.on("connection", (socket: Socket) => {
-	console.log("new connection")
-
 	socket.on(Events.JOIN_ROOM, (name: string, room_name: string) => {
 		socket.join(room_name)
 
