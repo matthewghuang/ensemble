@@ -1,20 +1,23 @@
 doctype html
 html(lang="en")
-	include include/head.pug
-	link(rel="stylesheet", href="https://cdn.plyr.io/3.6.3/plyr.css")
+	head
+		title ensemble
 	body
 		.container
 			h1 ensemble
 
 			video#video.video-js(controls playsinline)
 
-			.row
-				.column
+			.pure-g
+				.pure-u-1-2
 					h2 members
-					ul#members_ul
-				.column
-					h2 change media
-					input(type="text" placeholder="media")
-					button change media
+					ul#members
+				.pure-u-1-2
+					form#media-form.pure-form.pure-form-stacked
+						fieldset
+							h2 change media
+							label(for="src") Source (MP4, YouTube, Vimeo)
+							input#src(type="text" name="src")
+							button#change_media Change Media 
 
 		script(src="watch.js" type="module")
