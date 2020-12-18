@@ -2,7 +2,9 @@ import { Server, Socket } from "socket.io"
 import Events from "../common/events"
 import Update from "../common/update"
 
-const io = new Server(3000, {
+const port: number = Number(process.env.port) ?? 3000
+
+const io = new Server(port, {
 	cors: {
 		origin: "*"
 	}
@@ -54,4 +56,4 @@ io.on("connection", (socket: Socket) => {
 	})
 })
 
-console.log(`socket.io server listening on port ${3000}`)
+console.log(`socket.io server listening on port ${port}`)
