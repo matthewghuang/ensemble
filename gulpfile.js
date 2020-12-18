@@ -31,7 +31,7 @@ const run_snowpack = (cb) => {
 	return exec("yarn snowpack build")
 }
 
-const minify_js = () => {
+const process_js = () => {
 	return gulp.src([ "build/**/*.js" ])
 		.pipe(terser())
 		.pipe(gulp.dest("build"))
@@ -44,5 +44,5 @@ const process_html = () => {
 		.pipe(gulp.dest("build"))
 }
 
-gulp.task("snowpack", gulp.series(run_snowpack, minify_js, process_html))
+gulp.task("snowpack", gulp.series(run_snowpack, process_js, process_html))
 gulp.task("server", gulp.series(compile_server))
