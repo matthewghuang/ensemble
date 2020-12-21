@@ -3,17 +3,14 @@ import Events from "../common/events"
 import Update from "../common/update"
 import express from "express"
 import http from "http"
-import path from "path"
 
 const port: number = Number(process.env.PORT) || 3000
 
 const app = express()
 const http_server = http.createServer(app)
 
-app.use(express.static(path.join(__dirname, "../../build")))
-
 app.get("/", (req, res) => {
-	res.sendFile("index.html", { root: path.join(__dirname, "../../build") })
+	res.send(":)")
 })
 
 const io = new Server(http_server, {

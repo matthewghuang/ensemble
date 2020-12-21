@@ -9,12 +9,9 @@
     "start": "gulp snowpack && gulp server && node out/server/index.js"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.6.2",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "eslint": "^7.15.0",
-    "human-readable-ids": "^1.0.4",
-    "jasmine": "^3.6.3",
     "live-server": "^1.2.1"
   },
   "dependencies": {
