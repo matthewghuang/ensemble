@@ -38,7 +38,7 @@ const process_js = () => {
 }
 
 const process_html = () => {
-	return gulp.src("build/*.pug")
+	return gulp.src("build/**/*.html")
 		.pipe(pug())
 		.pipe(htmlmin({ collapseWhitespace: true }))
 		.pipe(gulp.dest("build"))
