@@ -6,12 +6,13 @@
 	import { onMount } from "svelte"
 	import { io } from "socket.io-client"
 	import Events from "../common/events"
-	import Plyr from "plyr"
-	import "plyr/dist/plyr.css"
+	import videojs from "video.js"
+	import "videojs-youtube/dist/Youtube.min.js"
+	import "video.js/dist/video-js.min.css"
 
 	const socket = io("https://ensemble-rla.herokuapp.com")
 
-	let player: Plyr
+	let player
 	let your_name: string
 	let members: Array<[string, string]> = []
 	let src_value
@@ -19,9 +20,9 @@
 	$: is_host = members[0] ? members[0][1] == your_name : false
 
 	onMount(async () => {
-		player = new Plyr("#video")	
+		player = videojs("video")
 
-		player.on("seeked", () => update_server({ time: player.currentTime }))
+		player.on("seeked", () => update_server({ time: player.currentTime() }))
 		player.on("play", () => update_server({ paused: false }))
 		player.on("pause", () => update_server({ paused: true }))
 	})
@@ -39,9 +40,9 @@
 		setInterval(() => {
 			if (is_host && player) {
 				const update = {
-					src: player.source as any,
+					src: player.src(),
 					time: player.currentTime,
-					paused: player.paused
+					paused: player.paused()
 				}
 
 				update_server(update)
@@ -52,28 +53,20 @@
 	socket.on(Events.UPDATE_CLIENT, (update) => {
 		const { src, time, paused } = update
 
-		if (src != undefined && src != (player.source as any))
+		if (src != undefined && src != (player.src() as any))
 			set_src(src)
 		
-		if (time != undefined && Math.abs(time - player.currentTime) > 1)
-			player.currentTime = time
+		if (time != undefined && Math.abs(time - player.currentTime()) > 1)
+			player.currentTime(time); console.log("setting time", time, player.currentTime())
 		
 		if (paused != undefined)
-			player.togglePlay(!paused)
+			paused ? player.pause() : player.play()
 	})
 
 	socket.on(Events.UPDATE_MEMBERS, u => members = u)
 
 	const set_src = (src: string) => {
-		player.source = {
-			type: "video",
-			sources: [
-				{
-					src: src,
-					type: "video/mp4"
-				}
-			]
-		}
+		player.src({ src: src, type: "video/mp4" })
 	}
 
 	const update_server = (update) => {
@@ -89,7 +82,7 @@
 	<div class="container">
 		<h1><a href="/">ensemble</a></h1>
 
-		<video id="video" controls playsinline></video>
+		<video id="video" class="video-js" controls></video>
 
 		<div class="pure-g">
 			<div class="pure-u-1 pure-u-md-1-2">
