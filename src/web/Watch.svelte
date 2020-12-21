@@ -20,7 +20,9 @@
 	$: is_host = members[0] ? members[0][1] == your_name : false
 
 	onMount(async () => {
-		player = videojs("video")
+		player = videojs("video", {
+			techOrder: [ "html5", "youtube" ],
+		})
 
 		player.on("seeked", () => update_server({ time: player.currentTime() }))
 		player.on("play", () => update_server({ paused: false }))
@@ -41,7 +43,7 @@
 			if (is_host && player) {
 				const update = {
 					src: player.src(),
-					time: player.currentTime,
+					time: player.currentTime(),
 					paused: player.paused()
 				}
 
@@ -57,16 +59,19 @@
 			set_src(src)
 		
 		if (time != undefined && Math.abs(time - player.currentTime()) > 1)
-			player.currentTime(time); console.log("setting time", time, player.currentTime())
+			player.currentTime(time)
 		
-		if (paused != undefined)
+		if (paused != undefined && paused != player.paused())
 			paused ? player.pause() : player.play()
 	})
 
 	socket.on(Events.UPDATE_MEMBERS, u => members = u)
 
 	const set_src = (src: string) => {
-		player.src({ src: src, type: "video/mp4" })
+		if (src.indexOf("youtu") > 0)
+			player.src({ src: src, type: "video/youtube" })
+		else
+			player.src({ src: src, type: "video/mp4" })
 	}
 
 	const update_server = (update) => {
@@ -82,7 +87,7 @@
 	<div class="container">
 		<h1><a href="/">ensemble</a></h1>
 
-		<video id="video" class="video-js" controls width="640" height="480"></video>
+		<video id="video" class="video-js vjs-fluid" controls></video>
 
 		<div class="pure-g">
 			<div class="pure-u-1 pure-u-md-1-2">
