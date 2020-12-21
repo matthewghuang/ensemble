@@ -3,7 +3,8 @@ const Events = {
 	UPDATE_MEMBERS: "update members",
 	UPDATE_SERVER: "update server",
 	UPDATE_CLIENT: "update client",
-	DISCONNECTING: "disconnecting"
+	DISCONNECTING: "disconnecting",
+	CONNECT: "connect"
 }
 
 export default Events

@@ -9,10 +9,13 @@
     "start": "gulp snowpack && gulp server && node out/server/index.js"
   },
   "devDependencies": {
+    "@snowpack/plugin-svelte": "^3.4.1",
+    "@types/page": "^1.11.0",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
     "eslint": "^7.15.0",
-    "live-server": "^1.2.1"
+    "live-server": "^1.2.1",
+    "svelte": "^3.31.0"
   },
   "dependencies": {
     "@types/express": "^4.17.9",
@@ -24,6 +27,7 @@
     "gulp-rename": "^1.0.0",
     "gulp-terser": "^1.0.0",
     "gulp-typescript": "^5.0.0-alpha.1",
+    "page": "^1.11.6",
     "plyr": "^3.6.3",
     "purecss": "^2.0.3",
     "snowpack": "^2.18.4",
