@@ -82,7 +82,7 @@
 	<div class="container">
 		<h1><a href="/">ensemble</a></h1>
 
-		<video id="video" class="video-js" controls></video>
+		<video id="video" class="video-js" controls width="640" height="480"></video>
 
 		<div class="pure-g">
 			<div class="pure-u-1 pure-u-md-1-2">

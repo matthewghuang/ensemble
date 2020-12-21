@@ -1,8 +1,12 @@
+<svelte:head>
+	<title>ensemble | home</title>
+</svelte:head>
+
 <div class="home">
 	<div class="container">
 		<h1>ensemble <small>watch videos, together</small></h1>
 
-		<form class="pure-form pure-form-stacked">
+		<form action="/watch" class="pure-form pure-form-stacked">
 			<fieldset>
 				<label for="name">Your Name</label>
 				<input type="text" name="name">

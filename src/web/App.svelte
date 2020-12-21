@@ -7,10 +7,12 @@
 	import "purecss/build/grids-responsive-min.css"
 	import "./style.css"
 
-	let route = Home;
+	let route;
 
 	page("/", () => route = Home)
 	page("/watch", () => route = Watch)
+
+	page()
 </script>
 
 <body>
