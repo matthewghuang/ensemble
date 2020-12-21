@@ -27,7 +27,7 @@ const compile_server = () => {
 
 }
 
-const run_snowpack = (cb) => {
+const run_snowpack = () => {
 	return exec("yarn snowpack build")
 }
 
