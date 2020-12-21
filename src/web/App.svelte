@@ -7,14 +7,21 @@
 	import "purecss/build/grids-responsive-min.css"
 	import "./style.css"
 
-	let route;
+	let route
+	let context
 
-	page("/", () => route = Home)
-	page("/watch", () => route = Watch)
+	page("/", ctx => create_route(ctx, Home))
+	page("/watch/:room_id", ctx => create_route(ctx, Watch))
+	page("/watch/:room_id/:name", ctx => create_route(ctx, Watch))
 
 	page()
+
+	const create_route = (ctx, component) => {
+		route = component
+		context = ctx
+	}
 </script>
 
 <body>
-	<svelte:component this={route}></svelte:component>
+	<svelte:component this={route} context={context}></svelte:component>
 </body>
