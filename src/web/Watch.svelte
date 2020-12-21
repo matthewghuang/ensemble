@@ -16,12 +16,16 @@
 	let your_name: string
 	let members: Array<[string, string]> = []
 	let src_value
+	let volume_value
 
 	$: is_host = members[0] ? members[0][1] == your_name : false
+	$: player ? player.volume(volume_value) : null
+	$: is_host, player && modify_controlbar()
 
 	onMount(async () => {
 		player = videojs("video", {
 			techOrder: [ "html5", "youtube" ],
+			controls: true
 		})
 
 		player.on("seeked", () => update_server({ time: player.currentTime() }))
@@ -81,13 +85,23 @@
 	const change_media = () => {
 		set_src(src_value)
 	}
+
+	const modify_controlbar = () => {
+		player.removeChild("controlBar")
+		player.addChild("controlBar", {
+			playToggle: is_host,
+			volumeMenuButton: true,
+			progressControl: is_host,
+			remainingTimeDisplay: true
+		})
+	}
 </script>
 
 <div class="watch">
 	<div class="container">
 		<h1><a href="/">ensemble</a></h1>
 
-		<video id="video" class="video-js vjs-fluid" controls></video>
+		<video id="video" class="video-js vjs-fluid"></video>
 
 		<div class="pure-g">
 			<div class="pure-u-1 pure-u-md-1-2">
