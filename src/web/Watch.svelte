@@ -129,7 +129,7 @@
 								<h2>change media</h2>
 								<label for="src">Source</label>
 								<input type="text" name="src" bind:value={src_value}>
-								<button on:click|preventDefault={change_media}>Change Media</button>
+								<button class="pure-button" on:click|preventDefault={change_media}>Change Media</button>
 							</fieldset>
 						</form>
 					</div>
